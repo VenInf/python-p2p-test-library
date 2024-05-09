@@ -57,8 +57,18 @@ time.sleep(2)
 node_main.request_known_data(node_3.id)
 time.sleep(2)
 
+print(f"node_main.data_id_table -- {node_main.data_id_table}")
+print(f"node_main.known_data -- {node_main.known_data}")
+
+node_main.request_data_by_id(100)
+time.sleep(2)
+
+node_main.request_data_by_id(101)
+time.sleep(2)
 
 print(f"node_main.data_id_table -- {node_main.data_id_table}")
+print(f"node_main.known_data -- {node_main.known_data}")
+
 
 
 print("--------      End network      -------------")

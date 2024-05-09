@@ -13,7 +13,13 @@ class RegularNode (Node):
         self.known_nodes = set()
         print(f"Init node {host}:{port}, {id}")
 
+        self.data_id_table = {}
         self.known_data = {}
+
+    def start(self):
+        super(RegularNode, self).start()
+        print(f"connect with main node {(self.main_node_host, self.main_node_port)}")
+        self.connect_with_node(host=self.main_node_host, port=self.main_node_port)
 
     def outbound_node_connected(self, node):
         print("outbound_node_connected (" + self.id + "): " + node.id)
@@ -48,16 +54,21 @@ class RegularNode (Node):
                 print(f"sending known data id: {data_id} by {conneciton_to_main}")
                 self.send_to_node(conneciton_to_main, f"[knowndataans]{self.id}:{data_id}\n")
 
+        if data.startswith("[datareq]"):
+            req_data_id = data.removeprefix("[datareq]").removesuffix("\n")
+            for data_id, known_data_by_id in self.known_data.items():
+                if (str(data_id) == str(req_data_id)):
+                    print(f"{self.id} found requested data id {data_id}")
+                    self.send_to_node(node, f"[dataans]{data_id}:{known_data_by_id}")
+                    return
+            else:
+                print(f"requested data id {req_data_id} is not found")
+
     def node_disconnect_with_outbound_node(self, node):
         print("node wants to disconnect with oher outbound node: (" + self.id + "): " + node.id)
         
     def node_request_to_stop(self):
         print("node is requested to stop (" + self.id + "): ")
-
-    def start(self):
-        super(RegularNode, self).start()
-        print(f"connect with main node {(self.main_node_host, self.main_node_port)}")
-        self.connect_with_node(host=self.main_node_host, port=self.main_node_port)
 
     def connect_to_known_nodes(self):
         if(not self.is_main_node):
@@ -68,3 +79,4 @@ class RegularNode (Node):
     def add_data(self, data_id, data):
         self.known_data.update({data_id: data})
 
+        
