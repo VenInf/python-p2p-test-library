@@ -14,7 +14,6 @@ class MainNode (Node):
         self.data_id_table = {}
         self.known_data = {}
 
-
     def outbound_node_connected(self, node):
         print("outbound_node_connected (" + self.id + "): " + node.id)
         print(f"register {node.host}:{node.port}")
@@ -35,6 +34,12 @@ class MainNode (Node):
         print(f"unregister {node.host}:{node.port}")
         self.known_nodes.remove((node.host, node.port))
 
+    def node_disconnect_with_outbound_node(self, node):
+        print("node wants to disconnect with oher outbound node: (" + self.id + "): " + node.id)
+        
+    def node_request_to_stop(self):
+        print("node is requested to stop (" + self.id + "): ")
+    
     def connection_by_id(self, node_id):
         for n in self.all_nodes:
             if str(n.id) == str(node_id):
@@ -63,11 +68,6 @@ class MainNode (Node):
             print(f"{self.id} received requested data {data_id} : {known_data_by_id}")
             self.known_data.update({data_id: known_data_by_id})
 
-    def node_disconnect_with_outbound_node(self, node):
-        print("node wants to disconnect with oher outbound node: (" + self.id + "): " + node.id)
-        
-    def node_request_to_stop(self):
-        print("node is requested to stop (" + self.id + "): ")
 
     def send_known_nodes(self):
         print("sending nodes information")
@@ -84,6 +84,5 @@ class MainNode (Node):
                 print(f"{node_id} has the {req_data_id}")
                 self.send_to_node(self.connection_by_id(node_id), f"[datareq]{req_data_id}")
                 return
-
         print(f"no info who has the data id = {req_data_id}")
-            
+
