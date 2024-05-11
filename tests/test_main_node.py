@@ -8,13 +8,16 @@ sys.path.insert(0, '..')  # Adjust path for importing from the parent directory
 from lib.main_node import MainNode
 from lib.regular_node import RegularNode
 
+
 class TestMainNode(unittest.TestCase):
     def setUp(self):
         """Setup unique ports for each test to avoid binding errors."""
         self.base_port = random.randint(49152, 65535)
         self.node_main = MainNode("127.0.0.1", self.base_port, id=1)
-        self.node_2 = RegularNode("127.0.0.1", self.base_port + 1, id=2, main_id=1, main_node_host="127.0.0.1", main_node_port=self.base_port)
-        self.node_3 = RegularNode("127.0.0.1", self.base_port + 2, id=3, main_id=1, main_node_host="127.0.0.1", main_node_port=self.base_port)
+        self.node_2 = RegularNode("127.0.0.1", self.base_port + 1, id=2, main_id=1, main_node_host="127.0.0.1",
+                                  main_node_port=self.base_port)
+        self.node_3 = RegularNode("127.0.0.1", self.base_port + 2, id=3, main_id=1, main_node_host="127.0.0.1",
+                                  main_node_port=self.base_port)
 
         self.node_main.start()
         self.node_2.start()
@@ -52,6 +55,7 @@ class TestMainNode(unittest.TestCase):
         self.node_2.stop()
         self.node_3.stop()
         time.sleep(0.5)
+
 
 if __name__ == '__main__':
     unittest.main()
